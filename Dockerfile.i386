@@ -1,0 +1,14 @@
+FROM node:8
+RUN mkdir -p /opt/iobroker/ && \
+    chmod 777 /opt/iobroker
+WORKDIR /opt/iobroker/
+RUN npm i -g npm@4 && \
+    npm install iobroker --unsafe-perm
+ADD scripts/run.sh run.sh
+RUN chmod +x run.sh
+VOLUME /opt/iobroker/
+
+EXPOSE 8081-8084
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["node", "node_modules/iobroker.js-controller/controller.js"]
